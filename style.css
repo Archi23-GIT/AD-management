@@ -1,0 +1,156 @@
+html{
+	min-height: 100%;
+}
+
+body {
+    padding-top: 80px;
+    padding-bottom: 40px;
+	background-color: #eeeeee !important;
+ }
+
+ .form-signin {
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+    color: #017572;
+ }
+ 
+ .form-signin .form-signin-heading,
+ .form-signin .checkbox {
+    margin-bottom: 10px;
+ }
+ 
+ .form-signin .checkbox {
+    font-weight: normal;
+ }
+ 
+ .form-signin .form-control {
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
+ }
+ 
+ .form-signin .form-control:focus {
+    z-index: 2;
+ }
+ 
+ .form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-color:#017572;
+ }
+ 
+ .form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-color:#017572;
+ }
+ 
+ h2{
+    text-align: center;
+    color: #017572;
+ }
+#entry_podglad tr:nth-child(even){
+	background-color: #dddddd;
+}
+#entry_podglad tr:nth-child(odd){
+	background-color: #cccccc;
+}
+#entry_podglad tr:hover{
+	color: #ffffff;
+	background-color: #125bd0;
+	vertical-align: center;
+	text-align: center;
+}
+.panel_member{
+	width: 100%;
+	margin: 0 auto;
+	margin-bottom: 1em;
+}
+
+.panel_member:first-child{
+	margin-top: 1em !important;
+}
+
+.navbar-fixedtop {
+	position: fixed !important;
+	top: 0;
+	z-index: 999;
+	width: 100%;
+}
+
+.navbar li {
+	margin-left: 1vw;
+}
+
+.nav-button {
+  position: fixed !important;
+  top: 64;
+  left: 0;
+}
+
+.container{
+    background-color: #fff;
+    border: 1px solid #212529;
+    border-radius: 10px;
+    margin-top: 1vh;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.asc:after {
+  content: "\25B2";
+}
+
+.desc:after {
+  content: "\25BC";
+}
+
+.selected {
+  background-color: #226be0;
+  color: #fff;
+  font-weight: bold;
+}
+
+#usrTable tr:nth-child(even) {
+  background-color: #eee;
+}
+
+#usrTable th{
+  cursor: pointer; 
+}
+
+#usrTable th:hover{
+  color: #ffffff;
+  background-color: #125bd0;
+}
+
+.tableT tr:hover{
+  color: red;
+}
+
+
+.footer-positioning{
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  height: 3vh;
+  width: 100%;
+  overflow:hidden;
+  color: #ffffff;
+}
+
+@media(max-width:1170px){
+  body {
+    padding-top: 150px;
+  }
+  .container {
+    width: auto;
+  }
+}
