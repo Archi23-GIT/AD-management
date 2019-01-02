@@ -1,12 +1,15 @@
 <?php
-	$ldapnihost = "82.145.72.13";
+	// adres servera AD
+    $ldapnihost = "ad.com.pl";
 
-	$ldaphost = "ldap.zut.edu.pl";
+    // adres servera LDAP do pobieranie nazw
+	$ldaphost = "ldap.com.pl";
 
+	// podstawowy kontener użytkowników w AD
 	$wi_cx = "cn=users,dc=wipsad,dc=local";
 
-	//OBSŁUGA ZIMBRA
-	// Czy właczyć obsługę sytemu pocztoweo ZIMBRA (domyślnie: false)
+	//OBSĹ�UGA ZIMBRA
+	// Czy wĹ‚aczyÄ‡ obsĹ‚ugÄ™ sytemu pocztoweo ZIMBRA (domyĹ›lnie: false)
 	$_SESSION['enableZimbra'] = true;
 	// adres serwera Zimbra
 	$_SESSION['mailserver'] = "zimbra.wi.zut.edu.pl";
