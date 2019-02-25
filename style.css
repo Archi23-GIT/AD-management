@@ -1,5 +1,6 @@
 html{
 	min-height: 100%;
+	min-width: 100%;
 }
 
 body {
@@ -95,13 +96,21 @@ body {
   left: 0;
 }
 
-.container{
-    background-color: #fff;
+.con{
+	background-color: #fff;
     border: 1px solid #212529;
     border-radius: 10px;
-    margin-top: 1vh;
-    margin-right: auto;
-    margin-left: auto;
+    width: 100%;
+	padding-right: 15px;
+	padding-left: 500px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.full-width-div {
+    position: absolute;
+    width: 100%;
+    left: 0;
 }
 
 .asc:after {

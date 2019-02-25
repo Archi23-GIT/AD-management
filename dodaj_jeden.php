@@ -6,7 +6,7 @@
 		if($grupa == "Pulpitowi Stud"){
 			$ldapuser = $_SESSION['username'];
 			$ldappass = $_SESSION['password'];
-			$ldap_con = ldap_connect($ldaphost) or die('<div class="alert alert-danger panel_member">
+			$ldap_con = ldap_connect($_SESSION['ldaphost-get']) or die('<div class="alert alert-danger panel_member">
 														 <strong>Błąd: </strong>Nieudane połączenie z (LDAP ZUT).
 													   </div>');
 			ldap_set_option($ldap_con, LDAP_OPT_PROTOCOL_VERSION, 3);
@@ -17,7 +17,7 @@
 			
 			if($conn) {
 				// szukanie danych w ldap zut
-				$s = ldap_search($ldap_con,"cn=users,cn=accounts,dc=zut,dc=edu,dc=pl","(uid=".$konto.")");
+				$s = ldap_search($ldap_con,$_SESSION['basedn-get'],"(uid=".$konto.")");
 				$info = ldap_get_entries($ldap_con, $s);
 				if ($info['count'] < 1) {
 					echo '<div class="alert alert-danger panel_member">
@@ -92,8 +92,8 @@
 		$email = $_POST['email'];
 		$konto = $_POST['konto'];
 		$grupa = $_POST['grupa'];
-		$wilogin = "cn=".$konto.",cn=users,dc=wipsad,dc=local";
-		$wi_cx = "cn=users,dc=wipsad,dc=local";
+		$wilogin = "cn=".$konto.",".$_SESSION['basedn'];
+		$wi_cx = $_SESSION['basedn'];
 ?>		
 		<h3>Dodawanie konta użytkownika</h3>
 		
@@ -105,7 +105,7 @@
 <?php
 			$ldapuser = $_SESSION['username'];
 			$ldappass = $_SESSION['password'];
-			$ldap_nicon = ldap_connect($ldapnihost) or die("Problem z połaczeniem...");
+			$ldap_nicon = ldap_connect($_SESSION['ldaphost']) or die("Problem z połaczeniem...");
 			ldap_set_option($ldap_nicon, LDAP_OPT_PROTOCOL_VERSION, 3);
 			ldap_set_option($ldap_nicon, LDAP_OPT_REFERRALS, 0);
 			$niconn = ldap_bind($ldap_nicon, $ldapuser, $ldappass) or die
@@ -116,7 +116,7 @@
 			if($grupa == "Pulpitowi Stud"){
 				$ldapuser = $_SESSION['username'];
 				$ldappass = $_SESSION['password'];
-				$ldap_con = ldap_connect($ldaphost) or die("<br>Problem z połaczeniem...(LDAP ZUT)<br>");
+				$ldap_con = ldap_connect($_SESSION['ldaphost-get']) or die("<br>Problem z połaczeniem...(LDAP ZUT)<br>");
 				ldap_set_option($ldap_con, LDAP_OPT_PROTOCOL_VERSION, 3);
 				ldap_set_option($ldap_con, LDAP_OPT_REFERRALS, 0);
 				$conn = ldap_bind($ldap_con) or die("Nie udało się jako anon(LDAP ZUT).");
@@ -128,7 +128,7 @@
 				if($conn) {
 					// dodawanie studenta
 					// szukanie danych w ldap zut
-					$s = ldap_search($ldap_con,"cn=users,cn=accounts,dc=zut,dc=edu,dc=pl","(uid=".$konto.")");
+					$s = ldap_search($ldap_con,$_SESSION['basedn-get'],"(uid=".$konto.")");
 					$info = ldap_get_entries($ldap_con, $s);
 					if ($info['count'] < 1) {
 						echo '<div class="alert alert-danger panel_member">
@@ -155,7 +155,7 @@
 				
 				
 				// przygotowywanie struktury
-				$s1 = ldap_search($ldap_nicon, $wi_cx, "(uidnumber=*)", array("uidnumber"));
+				$s1 = ldap_search($_SESSION['ldaphost'], $_SESSION['basedn'], "(uidnumber=*)", array("uidnumber"));
 				$result = ldap_get_entries($ldap_nicon, $s1);
 				$count = $result['count'];
 				rsort($result);
@@ -283,7 +283,7 @@
 		</div>
 		<div class="card">
 			<div class="card-header" style="text-align: center;">
-				Dodawanie do NI WIZUT.
+				Dodawanie do domeny.
 			</div>
 			<div class="card-text">
 <?php
@@ -291,7 +291,7 @@
 
 			$ldapuser = $_SESSION['username'];
 			$ldappass = $_SESSION['password'];
-			$ldap_nicon = ldap_connect($ldapnihost) or die("Problem z połaczeniem...");
+			$ldap_nicon = ldap_connect($_SESSION['ldaphost']) or die("Problem z połaczeniem...");
 			ldap_set_option($ldap_nicon, LDAP_OPT_PROTOCOL_VERSION, 3);
 			ldap_set_option($ldap_nicon, LDAP_OPT_REFERRALS, 0);
 			$niconn = ldap_bind($ldap_nicon, $ldapuser, $ldappass) or die('<div class="alert alert-danger panel_member">
@@ -318,7 +318,7 @@
 						</div>
 <?php
 						// Dodanie do grupy
-						$group_name = "cn=".$grupa.",cn=users,dc=wipsad,dc=local";
+						$group_name = "cn=".$grupa.",".$_SESSION['basedn'];
 						$group_info['member'] = $wilogin;
 						$r = ldap_mod_add($ldap_nicon, $group_name, $group_info);
 						//$r = ldap_mod_add($ldap_con, $group_name, $group_info);
@@ -360,15 +360,15 @@ else{
 		<table>
 			<tr>
 				<th>Nazwisko:</th>
-				<td><input type="text" disabled="disabled" name="nazwisko" placeholder="Nazwisko" required></td>
+				<td><input type="text" disabled="disabled" name="nazwisko" placeholder="Nazwisko" ></td>
 			</tr>
 			<tr>
 				<th>Imię:</th>
-				<td><input type="text" disabled="disabled" name="imie" placeholder="Imię" required></td>
+				<td><input type="text" disabled="disabled" name="imie" placeholder="Imię" ></td>
 			</tr>
 			<tr>
 				<th>Adres e-mail:</th>
-				<td><input type="text" disabled="disabled" name="email" placeholder="Adres e-mail" required></td>
+				<td><input type="text" disabled="disabled" name="email" placeholder="Adres e-mail" ></td>
 			</tr>
 			<tr>
 				<th>Nazwa konta:</th>
@@ -376,7 +376,10 @@ else{
 			</tr>
 			<tr>
 				<th>Grupa:</th>
-				<td><input type="radio" name="grupa" id="gidStudent" checked="checked" value="Pulpitowi Stud">Student<input type="radio" name="grupa" id="gidDydaktyk" value="Pulpitowi Dyda">Dydaktyk <!-- <input type="radio" name="grupa" value="brak">Brak --></td>
+				<td><input type="radio" name="grupa" id="gidStudent" checked="checked" value="Pulpitowi Stud">Pulpitowi Stud<br>
+					<input type="radio" name="grupa" id="gidDydaktyk" value="Pulpitowi Dyda">Pulpitowi Dyda<br>
+					<input type="radio" name="grupa" id="gidMailonly" value="MailOnly">MailOnly
+				</td>
 			</tr>
 			<tr>
 				<td rowspan="2"><button class="btn btn-success" type="submit" id="butZapisz" disabled name="zapisz">Zapisz!</button></td>
@@ -401,9 +404,9 @@ else{
 				$inputNazwisko.attr('disabled', 'disabled');
 				$inputEmail.attr('disabled', 'disabled');
 				//buttony
-				$buttonSprawdz.removeAttr('disabled');
-				$buttonSprawdz.removeClass("btn-inactive");
-				$buttonSprawdz.addClass("btn-primary");
+				//$buttonSprawdz.removeAttr('disabled');
+				//$buttonSprawdz.removeClass("btn-inactive");
+				//$buttonSprawdz.addClass("btn-primary");
 				$buttonZapisz.attr('disabled', 'disabled');
 				$buttonZapisz.removeClass("btn-success");
 				$buttonZapisz.addClass("btn-inactive");
@@ -415,9 +418,9 @@ else{
 				$buttonZapisz.removeAttr('disabled');
 				$buttonZapisz.removeClass("btn-inactive");
 				$buttonZapisz.addClass("btn-success");
-				$buttonSprawdz.attr('disabled', 'disabled');
-				$buttonSprawdz.removeClass("btn-primary");
-				$buttonSprawdz.addClass("btn-inactive");
+				//$buttonSprawdz.attr('disabled', 'disabled');
+				//$buttonSprawdz.removeClass("btn-primary");
+				//$buttonSprawdz.addClass("btn-inactive");
 			}
 		}).trigger('change');
 		

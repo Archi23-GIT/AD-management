@@ -35,7 +35,7 @@
 			// Obsługa systemu ZIMBRA
 			if ($_SESSION['enableZimbra']) {include 'zimbra-conn.php'; }
 			
-			$search_result = ldap_list($ldap_con, $wi_cx, "(&(uid=*)(userAccountControl:1.2.840.113556.1.4.803:=2))");
+			$search_result = ldap_search($ldap_con, $wi_cx, "(&(cn=*)(userAccountControl:1.2.840.113556.1.4.803:=2))");
 			if (($search_result != NULL) && ($search_result != false)) {
 				$result_entries = ldap_get_entries($ldap_con, $search_result);
 											
@@ -97,7 +97,7 @@
 ?>						
 							<tr>
 								<td><input type="checkbox" name="delikwent[]" value="<?php echo $result_entries[$entry_num]['dn']; ?>"></td>
-								<td><?php echo @$result_entries[$entry_num]['uid'][0]; ?></td>
+								<td><?php echo @$result_entries[$entry_num]['cn'][0]; ?></td>
 								<td><?php echo @$result_entries[$entry_num]['displayname'][0]; ?></td>
 								<td align=center><?php echo @$result_entries[$entry_num]['uidnumber'][0]; ?></td>
 								<td><?php echo @$result_entries[$entry_num]['homedirectory'][0]; ?></td>

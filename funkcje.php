@@ -1,5 +1,46 @@
 <?php
 require_once 'config.php';
+
+
+
+
+/**
+ * Tłumaczenie komunikatów
+ * 
+ * @param string $message Szukany tekst
+ * @return string|$message Wartosc tlumaczenia
+ * 
+ * @example echo lang_msg("Tekst do przetlumaczenia");
+ */
+function lang_msg($message) {
+	$handle = fopen("lang/".$_SESSION['lang'].".msg", "r");
+	if ($handle) {
+		while (($line = fgets($handle)) !== false) {
+			$lang_msg = explode("==", $line);
+			//print_r($lang_msg);
+			if ($message == $lang_msg[0]) {
+				return trim(preg_replace('/\s+/', ' ', $lang_msg[1]));
+			}
+		}
+		
+		fclose($handle);
+	} else {
+		die("No lang file...");
+	} 
+	return $message;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 /**
  * 
  * @param Object $object wskaźnik na połączenie do Zimbra

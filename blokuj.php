@@ -1,9 +1,9 @@
 <?php
 	if (isset($_POST['blokuj'])) {
-		$wi_cx = "cn=users,dc=wipsad,dc=local";
+		$wi_cx = $_SESSION['basedn'];
 		$ldapuser = $_SESSION['username'];
 		$ldappass = $_SESSION['password'];
-		$ldap_con = ldap_connect($ldapnihost) or die("<br>Problem z połaczeniem...<br>");
+		$ldap_con = ldap_connect($_SESSION['ldaphost']) or die("<br>Problem z połaczeniem...<br>");
 		ldap_set_option($ldap_con, LDAP_OPT_PROTOCOL_VERSION, 3);
 		ldap_set_option($ldap_con, LDAP_OPT_REFERRALS, 0);
 	
@@ -26,48 +26,17 @@
 					$r = ldap_modify($ldap_con, $dn, $e_newdata);
 					$R_WIN = $r;
 					
-					/*
-					//Parametry do ZIMBRA (login,haslo,serwer)
-					$zimbraServer = $mailserver;
-					$zimbraAdminEmail = $ldapuser;
-					$zimbraAdminPassword = $ldappass;
-
-					// either authenticate as admin:
-					$auth = new Zm_Auth($zimbraServer, $zimbraAdminEmail, $zimbraAdminPassword, "admin");
-					// then login
-					$l = $auth->login();
-					
-					if(is_a($l, "Exception")) {
-						?>
-						<div class="alert alert-danger panel_member">
-							<strong>ERROR! cannot login to '<i><?php echo $zimbraServer."(".$l->getMessage().")" ?></i>'.
-						</div>
-						<?php
-					}
-					// wydobywanie uzytkownika z ciagu DN
-					
- 
-					$accountManager = new Zm_Account($auth);
-					$account_name = getCNofDN($dn).'@wi.zut.edu.pl';
- 
-					//Blokada na ZIMBRA
-					$r = $accountManager->setAccountStatus($account_name,'closed');
-
-					$R_MAIL = $r;
-					
-					*/
-					
 					
 					if($r){
 					?>
 						<div class="alert alert-success panel_member">
-							<strong>Sukces! </strong>Użytkownik o DN '<i><?php echo $dn ?></i>' został zablokowany (NI WIZUT).
+							<strong>Success! </strong>The user <i>dn: '<?php echo strtoupper($dn) ?></i>' is locked in domain <?php echo strtoupper($_SESSION['domain']) ?>.
 						</div>
 					<?php
 					} else{
 					?>
 						<div class="alert alert-danger panel_member">
-							<strong>Błąd: </strong>Użytkownik o DN '<i><?php echo $dn ?></i>' nie mógł zostać zablokowany (NI WIZUT).
+							<strong>Error: </strong>The user <i>dn: '<?php echo $dn ?></i>' has not been locked.
 						</div>
 					<?php
 					}
@@ -80,7 +49,7 @@
 				}
 			}
 
-			ldap_unbind($conn);
+			ldap_unbind($ldap_con);
 		}
 	}
 	else {

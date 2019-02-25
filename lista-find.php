@@ -1,41 +1,43 @@
 <?php
 
-	if (isset($_POST['usun'])) {
-		$ldapuser = $_SESSION['username'];
-		$ldappass = $_SESSION['password'];
-		$ldap_con = ldap_connect($_SESSION['ldaphost']) or die("<br>".lang_msg("Connection problem...")."<br>");
-		ldap_set_option($ldap_con, LDAP_OPT_PROTOCOL_VERSION, 3);
-		ldap_set_option($ldap_con, LDAP_OPT_REFERRALS, 0);
+if (isset($_POST['usun'])) {
+	$ldapuser = $_SESSION['username'];
+	$ldappass = $_SESSION['password'];
+	$ldap_con = ldap_connect($_SESSION['ldaphost']) or die("<br>".lang_msg("Connection problem...")."<br>");
+	ldap_set_option($ldap_con, LDAP_OPT_PROTOCOL_VERSION, 3);
+	ldap_set_option($ldap_con, LDAP_OPT_REFERRALS, 0);
 	
-		$conn = ldap_bind($ldap_con, $ldapuser, $ldappass) or die(lang_msg("Failed as admin ..."));
-
-		if ($conn) {
-			foreach ($_POST['delikwent'] as $dn) {
-				ldap_delete($ldap_con, $dn);
-			}
-
-			ldap_unbind($conn);
+	$conn = ldap_bind($ldap_con, $ldapuser, $ldappass) or die(lang_msg("Failed as admin ..."));
+	
+	if ($conn) {
+		foreach ($_POST['delikwent'] as $dn) {
+			ldap_delete($ldap_con, $dn);
 		}
+		
+		ldap_unbind($conn);
 	}
-	else {
-		$ldapuser = $_SESSION['username'];
-		$ldappass = $_SESSION['password'];
-		$ldap_con = ldap_connect($_SESSION['ldaphost']) or die("<br>".lang_msg("Connection problem...")."<br>");
-		ldap_set_option($ldap_con, LDAP_OPT_PROTOCOL_VERSION, 3);
-		ldap_set_option($ldap_con, LDAP_OPT_REFERRALS, 0);
+}
+else {
+	$ldapuser = $_SESSION['username'];
+	$ldappass = $_SESSION['password'];
+	$ldap_con = ldap_connect($_SESSION['ldaphost']) or die("<br>".lang_msg("Connection problem...")."<br>");
+	ldap_set_option($ldap_con, LDAP_OPT_PROTOCOL_VERSION, 3);
+	ldap_set_option($ldap_con, LDAP_OPT_REFERRALS, 0);
+	
+	$conn = ldap_bind($ldap_con, $ldapuser, $ldappass) or die(lang_msg("Failed as admin ..."));
+	?>
 
-		$conn = ldap_bind($ldap_con, $ldapuser, $ldappass) or die(lang_msg("Failed as admin ..."));
-?>
-
-		<h3><b><?php echo lang_msg("Active accounts") ?></b>
+		<h3><b><?php echo lang_msg("Search result") ?></b>
 
 <?php
 		if ($conn) {
-			// Obsługa systemu ZIMBRA
-			if ($_SESSION['enableZimbra']) {include 'zimbra-conn.php';}
+			
+			$coszukasz = $_POST['Find'];
+			
+			echo "[<i>".$coszukasz;
 			
 			//echo "Filter:".$_SESSION['filter'];
-			$search_result = ldap_search($ldap_con, $_SESSION['basedn'], $_SESSION['filter'],$_SESSION['attr']);
+			$search_result = ldap_search($ldap_con, $_SESSION['basedn'], "(|(uid=*".$coszukasz."*)(cn=*".$coszukasz."*)(sn=".$coszukasz."*)(givenname=".$coszukasz."*))",$_SESSION['attr']);
 			if (($search_result != NULL) && ($search_result != false)) {
 				$result_entries = ldap_get_entries($ldap_con, $search_result);
 											
@@ -50,7 +52,7 @@
 				$blockdate_unixtimestamp *= 10000000;
 				
 				// Wyswietlanie liczny znalezionych po tytule
-				echo " [".$result_entries['count']."]</h3>";
+				echo "</i>] - ".lang_msg("found")." ".$result_entries['count']." ".lang_msg("perons")."</h3>";
 ?>
 				<form action="index.php?podstrona=usun" method="POST">
 				    <nav class="navbar navbar-dark bg-dark nav-button">
