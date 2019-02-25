@@ -1,4 +1,4 @@
-# AD-management
+# AD-management - version 0.7
 A Web-based tool for managing Microsoft Active Directory. Built on PHP based on the LDAP protocol for communication with AD.
 
 Available functions:
