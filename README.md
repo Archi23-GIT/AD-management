@@ -12,3 +12,6 @@ Available functions:
     possibility of cooperation with another LDAP tree
     support for the Services for Unix extension (SFU)
     automatic UIDNumber management (Unix attribute)
+
+Requirements:
+php-ldap
